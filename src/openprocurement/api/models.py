@@ -785,6 +785,17 @@ class Revision(Model):
     rev = StringType()
 
 
+class TenderRevisions(SchematicsDocument, Model):
+    revisions = ListType(ModelType(Revision), default=list())
+
+
+def save_tender_revision(db, tender):
+    rev_id = 'r_{}'.format(tender.id)
+    rev = TenderRevisions(db.get(rev_id, {'id': rev_id}))
+    rev.revisions = tender.revisions
+    rev.store(db)
+
+
 class Question(Model):
     class Options:
         roles = {
